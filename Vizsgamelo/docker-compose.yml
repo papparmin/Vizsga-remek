@@ -1,0 +1,63 @@
+services:
+  # 1. FRONTEND (React + Vite + Nginx)
+  frontend:
+    container_name: exploree_frontend   # <-- NÉV JAVÍTVA
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    depends_on:
+      - api
+    ports:
+      - "8100:80"             # Böngészőben: http://localhost:8100
+    restart: unless-stopped
+
+  # 2. ADATBÁZIS (MySQL)
+  db:
+    image: mysql:8.4
+    container_name: exploree_db         # <-- NÉV JAVÍTVA
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpw
+      MYSQL_DATABASE: exploree          # <-- ADATBÁZIS NÉV JAVÍTVA
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: apppw
+    ports:
+      - "3307:3306"
+    volumes:
+      - exploree_db_data:/var/lib/mysql # <-- VOLUMEN NÉV JAVÍTVA
+      - ./db_init:/docker-entrypoint-initdb.d:ro 
+
+  # 3. PHPMYADMIN (Adatbázis kezelő)
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: exploree_phpmyadmin # <-- NÉV JAVÍTVA
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_started
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+    ports:
+      - "8101:80"             # Böngészőben: http://localhost:8101
+
+  # 4. BACKEND API (Node.js)
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: exploree_api        # <-- NÉV JAVÍTVA
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_USER: appuser
+      DB_PASSWORD: apppw
+      DB_DATABASE: exploree             # <-- ADATBÁZIS NÉV JAVÍTVA
+      PORT: 5050
+    ports:
+      - "5050:5050"           # Backend elérése: http://localhost:5050
+
+volumes:
+  exploree_db_data:                     # <-- VOLUMEN NÉV JAVÍTVA
