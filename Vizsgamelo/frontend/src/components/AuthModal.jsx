@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./AuthModal.css";
+import Swal from "sweetalert2";
 
 const BG_URL = "https://images.pexels.com/photos/23692399/pexels-photo-23692399/free-photo-of-scenic-view-of-a-mountain-range.jpeg";
 
@@ -84,15 +85,31 @@ export default function AuthModal({ open = true, onClose, onLogin, onRegister })
 
       if (onLogin) await onLogin(data.user);
       if (onClose) onClose();
-      setTimeout(() => window.location.reload(), 300); 
+      
+      // ÚJ: SweetAlert hívás sikeres belépésnél
+      Swal.fire({
+        icon: 'success',
+        title: 'Sikeres bejelentkezés!',
+        text: 'Üdvözlünk újra az Exploree-n!',
+        confirmButtonColor: '#28a745'
+      }).then(() => {
+        // Ez a rész csak akkor fut le, ha a felhasználó leokézta a popupot
+        window.location.reload(); 
+      });
 
     } catch (err) { 
+      // ÚJ: SweetAlert hívás hiba esetén
+      Swal.fire({
+        icon: 'error',
+        title: 'Sikertelen belépés',
+        text: err.message,
+        confirmButtonColor: '#dc3545'
+      });
       setError(err.message); 
     } finally { 
       setBusy(false); 
     }
   };
-
   // --- REGISZTRÁCIÓ LOGIKA ---
   const handleRegister = async (e) => {
     e.preventDefault();

@@ -1,19 +1,14 @@
-# 1. fázis: Buildelés (Node.js segítségével)
-FROM node:20-alpine AS build
+FROM node:22-alpine
+
 WORKDIR /app
+
 COPY package*.json ./
 RUN npm install
+
 COPY . .
-RUN npm run build
 
-# 2. fázis: Kiszolgálás (Nginx webszerverrel)
-FROM nginx:alpine
+# A Vite alapértelmezett portja
+EXPOSE 5173
 
-# A 'dist' mappa tartalmát átmásoljuk az Nginx-nek
-COPY --from=build /app/dist /usr/share/nginx/html
-
-# Bemásoljuk a saját nginx konfigurációnkat, ami kezeli a React routingot
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# A --host kapcsoló elengedhetetlen, hogy a Docker konténerből kilásson a Vite
+CMD ["npm", "run", "dev", "--", "--host"]
