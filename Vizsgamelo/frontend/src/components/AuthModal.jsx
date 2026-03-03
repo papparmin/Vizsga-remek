@@ -1,7 +1,8 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./AuthModal.css";
 import Swal from "sweetalert2";
+import { AuthContext } from "./AuthContext.jsx"; // <-- Itt a kontextusod
 
 const BG_URL = "https://images.pexels.com/photos/23692399/pexels-photo-23692399/free-photo-of-scenic-view-of-a-mountain-range.jpeg";
 
@@ -27,10 +28,13 @@ const EyeIcon = ({ open }) => (
   </svg>
 );
 
-// EZ ITT A LÉNYEG: az export default funkció!
 export default function AuthModal({ open = true, onClose, onLogin, onRegister }) {
   const nav = useNavigate();
   const firstRef = useRef(null);
+  
+  // ÚJ: Itt kérjük el a bejelentkező függvényt a központi agyból (AuthContext)
+  const { login: contextLogin } = useContext(AuthContext); 
+
   const [mode, setMode] = useState("login");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -74,31 +78,28 @@ export default function AuthModal({ open = true, onClose, onLogin, onRegister })
       const res = await fetch("http://localhost:5050/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(login)
+        body: JSON.stringify(login) // Ha a backend password_hash-t kér, írd át erre: { email: login.email, password_hash: login.password }
       });
       
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Hiba a belépésnél");
 
-      localStorage.setItem("exploree_token", data.token);
-      localStorage.setItem("exploree_user", JSON.stringify(data.user));
+      // ÚJ: A régi localStorage helyett az AuthContext menti el az adatokat és frissíti a Navbart!
+      contextLogin(data.token, data.user);
 
       if (onLogin) await onLogin(data.user);
       if (onClose) onClose();
       
-      // ÚJ: SweetAlert hívás sikeres belépésnél
+      // ÚJ: SweetAlert hívás (Nincs többé reload, az ablak 1.5 mp múlva eltűnik magától)
       Swal.fire({
         icon: 'success',
         title: 'Sikeres bejelentkezés!',
         text: 'Üdvözlünk újra az Exploree-n!',
-        confirmButtonColor: '#28a745'
-      }).then(() => {
-        // Ez a rész csak akkor fut le, ha a felhasználó leokézta a popupot
-        window.location.reload(); 
+        showConfirmButton: false,
+        timer: 1500
       });
 
     } catch (err) { 
-      // ÚJ: SweetAlert hívás hiba esetén
       Swal.fire({
         icon: 'error',
         title: 'Sikertelen belépés',
@@ -110,6 +111,8 @@ export default function AuthModal({ open = true, onClose, onLogin, onRegister })
       setBusy(false); 
     }
   };
+  contextLogin(data.token, data.user);
+
   // --- REGISZTRÁCIÓ LOGIKA ---
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -135,9 +138,22 @@ export default function AuthModal({ open = true, onClose, onLogin, onRegister })
 
       setMode("login");
       setLogin({...login, email: reg.email, password: ""});
-      setError("Sikeres regisztráció! Most már beléphetsz.");
+      
+      // SweetAlert sikeres regisztrációnál
+      Swal.fire({
+        icon: 'success',
+        title: 'Sikeres regisztráció!',
+        text: 'Most már beléphetsz a fiókodba.',
+        confirmButtonColor: '#28a745'
+      });
 
     } catch (err) { 
+      Swal.fire({
+        icon: 'error',
+        title: 'Hiba a regisztráció során',
+        text: err.message,
+        confirmButtonColor: '#dc3545'
+      });
       setError(err.message); 
     } finally { 
       setBusy(false); 

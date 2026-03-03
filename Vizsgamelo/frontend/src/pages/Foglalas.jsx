@@ -1,13 +1,17 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useContext, useEffect } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import "./Foglalas.css";
+import Swal from "sweetalert2"; // <-- ÚJ: SweetAlert import
+import { AuthContext } from "../../AuthContext"; // <-- ÚJ: AuthContext import (ellenőrizd az útvonalat!)
 
 export default function Foglalas() {
   const { tourId } = useParams();
   const nav = useNavigate();
   const loc = useLocation();
+  
+  // ÚJ: Kérjük el a usert és a tokent a központi agyból
+  const { user, token } = useContext(AuthContext);
 
-  // ✅ fallback: ha valaki direkt ír be URL-t, akkor is legyen cím (opcionális)
   const tourMap = useMemo(
     () => ({
       "matra-tel": { title: "Téli Mátra Gerinctúra" },
@@ -27,7 +31,6 @@ export default function Foglalas() {
   const state = loc.state || {};
   const selectedTitle = state.tourTitle || tourMap[tourId]?.title;
 
-  // ✅ ha nincs érvényes túra: vissza a túrákra
   if (!tourId || !selectedTitle) {
     return (
       <div className="foglalas-page">
@@ -44,6 +47,7 @@ export default function Foglalas() {
     );
   }
 
+  // ÚJ: Alapértelmezett állapot, üres mezőkkel
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -59,16 +63,73 @@ export default function Foglalas() {
     accept: false,
   });
 
+  // ÚJ: Ha betölt a komponens és van userünk, automatikusan kitöltjük az űrlapot!
+  useEffect(() => {
+    if (user) {
+      setForm((prev) => ({
+        ...prev,
+        name: `${user.firstName || ""} ${user.lastName || ""}`.trim(),
+        email: user.email || "",
+        phone: user.phone || "",
+      }));
+    }
+  }, [user]);
+
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
 
-  const onSubmit = (e) => {
+  // ÚJ: VALÓS BEKÜLDÉS A BACKENDNEK
+  const onSubmit = async (e) => {
     e.preventDefault();
     if (!form.accept) return;
-    // demo submit: később küldheted backendnek
-    alert(
-      `Foglalás (DEMO)\nTúra: ${selectedTitle}\nDátum: ${form.date}\nNév: ${form.name}\nEmail: ${form.email}`
-    );
-    nav("/turak");
+
+    // Ha nincs token (nincs bejelentkezve), megállítjuk és kiírjuk a hibát
+    if (!token) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Bejelentkezés szükséges',
+        text: 'A foglaláshoz kérlek jelentkezz be a fiókodba!',
+        confirmButtonColor: '#3085d6'
+      });
+      return;
+    }
+
+    try {
+      // Itt küldjük el az adatokat a backendnek (A címet igazítsd a valós backend routedhez!)
+      const res = await fetch("http://localhost:5050/api/foglalas", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}` // EZ A VARÁZSSZÓ: Itt adjuk át a belépőkártyát!
+        },
+        body: JSON.stringify({
+          tourId: tourId,
+          tourTitle: selectedTitle,
+          ...form // Elküldjük a teljes űrlapot
+        })
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Hiba a foglalás során");
+
+      // Sikeres foglalás jelzése
+      Swal.fire({
+        icon: 'success',
+        title: 'Sikeres foglalás!',
+        text: `Várunk sok szeretettel a(z) ${selectedTitle} túrán! A részleteket küldjük emailben.`,
+        showConfirmButton: false,
+        timer: 3000
+      });
+      
+      nav("/turak");
+
+    } catch (err) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Sikertelen foglalás',
+        text: err.message,
+        confirmButtonColor: '#dc3545'
+      });
+    }
   };
 
   return (

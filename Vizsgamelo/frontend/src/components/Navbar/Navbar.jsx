@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react"; // <-- ÚJ: useContext behozva
 import { Link, NavLink } from "react-router-dom";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import "./Navbar.css";
-
+import { AuthContext } from "../../AuthContext"; // Ellenőrizd, hogy a mappa útvonal jó-e!
 import logoImg from "../../assets/logonk.png";
 import AuthModal from "../AuthModal";
 
-// ... (a korábban küldött teljes Navbar.jsx, ami jó)
 const Icon = ({ type }) => {
   switch (type) {
     case "spotify":
@@ -39,6 +39,9 @@ const Icon = ({ type }) => {
 
 export default function Navbar() {
   const [authOpen, setAuthOpen] = useState(false);
+  
+  // ÚJ: Elkérjük a felhasználói adatokat és a kijelentkezés függvényt
+  const { user, logout } = useContext(AuthContext); 
 
   return (
     <>
@@ -64,14 +67,7 @@ export default function Navbar() {
             <span className="nav-sep" aria-hidden="true" />
 
             <div className="nav-social" aria-label="Social media">
-              <a
-                className="sico spotify"
-                href="https://open.spotify.com/playlist/19xgY84p5kystYNTi75v5v?si=a6ab22d572c041e4"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Spotify"
-                title="Spotify"
-              >
+              <a className="sico spotify" href="https://open.spotify.com/playlist/19xgY84p5kystYNTi75v5v?si=a6ab22d572c041e4" target="_blank" rel="noreferrer" aria-label="Spotify" title="Spotify">
                 <Icon type="spotify" />
               </a>
               <a className="sico instagram" href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram" title="Instagram">
@@ -87,9 +83,30 @@ export default function Navbar() {
           </nav>
 
           <div className="topbar-right">
-            <button className="apple-auth-btn" type="button" onClick={() => setAuthOpen(true)}>
-              Belépés
-            </button>
+            
+            {/* ÚJ LOGIKA ITT KEZDŐDIK: Ha be van jelentkezve, mást mutatunk */}
+            {user ? (
+              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                <span style={{ color: "white", fontSize: "15px", fontWeight: "bold" }}>
+                  Szia, {user.firstName}!
+                </span>
+                <AccountCircleIcon style={{ color: "white", fontSize: "28px" }} />
+                
+                <button 
+                  className="apple-auth-btn" 
+                  type="button" 
+                  onClick={logout}
+                  style={{ backgroundColor: "transparent", border: "1px solid rgba(255,255,255,0.5)", color: "white" }}
+                >
+                  Kijelentkezés
+                </button>
+              </div>
+            ) : (
+              // Ha NINCS bejelentkezve, marad a régi Belépés gomb
+              <button className="apple-auth-btn" type="button" onClick={() => setAuthOpen(true)}>
+                Belépés
+              </button>
+            )}
 
             <Link to="/turak" className="book-btn">
               Foglalás
