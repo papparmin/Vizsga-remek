@@ -2,7 +2,7 @@ Explore – Vizsgaremek
 Szoftverfejlesztő és -tesztelő záróvizsga remek
 Résztvevők: Németh Gergő és Papp Ármin
 
-Az Explore egy komplex, Full-Stack webalkalmazás, amely egyetlen letisztult felületen integrálja a túraszervezést és felszerelésbérlést, miközben erős, személyre szabott élményt nyújt a kalandvágyó felhasználóknak.
+Az Explore egy komplex, full-stack webalkalmazás, amely egyetlen letisztult felületen integrálja a túraszervezést és felszerelésbérlést, miközben erős, személyre szabott közösségi élményt nyújt.
 
 Tartalomjegyzék
 A projekt célkitűzése
@@ -86,7 +86,7 @@ Admin & Üzemeltetők: Az adminisztrációs vezérlőpult teljes körű fejleszt
 
 QA: Backend automatikus egységtesztek írása Jest keretrendszerrel.
 
-. Adatbázis architektúra
+5. Adatbázis architektúra
 A rendszer alapját egy 3NF (Harmadik Normálforma) szabályai szerint optimalizált, 14 táblából álló MySQL adatbázis adja. A tervezés két fő logikai blokkra oszlik:
 
 Felhasználók és interakciók: Felhasználói adatok, hashelt jelszavak, jogosultságok, foglalások, bérlések és személyes túrapreferenciák N:M kapcsolatokkal.
@@ -118,4 +118,6 @@ A rendszer indítása: A gyökérkönyvtárban elhelyezett inicializáló szkrip
 
 bash
 node init.js
+
+
 
