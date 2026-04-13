@@ -1,122 +1,170 @@
-Explore – Vizsgaremek
-Szoftverfejlesztő és -tesztelő záróvizsga remek
-Résztvevők: Németh Gergő és Papp Ármin
+# 🌍 Explore – Vizsgaremek  
+**Szoftverfejlesztő és -tesztelő záróvizsga projekt**
 
-Az Explore egy komplex, full-stack webalkalmazás, amely egyetlen letisztult felületen integrálja a túraszervezést és felszerelésbérlést, miközben erős, személyre szabott közösségi élményt nyújt.
+ **Készítette:**  
+- Németh Gergő  
+- Papp Ármin  
 
-Tartalomjegyzék
-A projekt célkitűzése
+---
 
-Fő funkciók és modulok
+## Projekt áttekintés
+Az **Explore** egy komplex, full-stack webalkalmazás, amely egyetlen letisztult felületen integrálja a túraszervezést és felszerelésbérlést, miközben személyre szabott közösségi élményt nyújt.
 
-Technológiai Stack
+Célunk egy modern, intelligens platform létrehozása, amely kiváltja a jelenlegi töredezett és elavult megoldásokat.
 
-Csapatmunka és Feladatkörök
+---
 
-Adatbázis architektúra
+##  Projekt célja
+A meglévő rendszerek problémái:
+- Töredezett információk  
+- Elavult felhasználói felületek  
+- Személyre szabhatóság hiánya  
 
-Szoftvertesztelés (QA)
+ **Megoldás:**  
+Egy **Single Page Application (SPA)** alapú rendszer, amely:
+- intelligens ajánlórendszert használ  
+- integrálja a túrákat és bérlést  
+- javítja a felhasználói élményt  
 
-Fejlesztési eszközök
+---
 
-Környezet és Futtatás
+##  Fő funkciók
 
-1. A projekt célkitűzése
-A téma kiválasztását a közös érdeklődési körünk inspirálta. A jelenlegi túraszervező és felszerelésbérlő portálok használata során számos felhasználói fájdalompontot azonosítottunk: töredezett információk, elavult felületek és a személyre szabhatóság hiánya.
+###  Személyre szabás
+- Intelligens ajánlórendszer  
+- Túratípus alapú szűrés (hegyi, vízi, városi)
 
-Célunk egy olyan modern, Single Page Application (SPA) alapú platform megalkotása volt, amely megoldást kínál ezekre a problémákra. Az Explore nem csupán informál a túrákról, hanem intelligens ajánlórendszerével segít a tartalomfeldolgozásban, miközben a felszerelésbérlési lehetőségeket is naprakészen tartja.
+### 🗓️ Túrafoglalás
+- Gyors jelentkezés  
+- Időpontkezelés  
+- Létszámkorlát  
 
-2. Fő funkciók és modulok
-Személyre szabott élmény: Intelligens ajánlórendszer, amely a felhasználó által kedvelt túratípusok (pl. hegyi, vízi, városi) alapján súlyozza a megjelenő tartalmakat.
+###  Felszerelésbérlés
+- Integrált rendszer  
+- Túrához kapcsolt eszközök  
 
-Túrákra jelentkezés: Egyszerű, gyors foglalási rendszer időpontválasztással és létszámkezeléssel.
+###  Hőtérkép
+- Interaktív térkép  
+- Népszerű útvonalak  
 
-Felszerelésbérlés: Túrákhoz kapcsolódó felszerelések (sátor, túrabot, hátizsák, stb.) bérlésének integrált kezelése.
+### Galéria
+- Felhasználói képfeltöltés  
+- Túra beszámolók  
 
-Hőtérkép: Az eddigi túráink vizuális megjelenítése interaktív hőtérképen, amely mutatja a legnépszerűbb útvonalakat.
+###  Admin felület
+- Szerepkör-alapú hozzáférés (RBAC)  
+- CRUD műveletek  
+- Felhasználó- és foglaláskezelés  
 
-Galéria: Képes beszámolók a korábbi túrákról, felhasználók által feltölthető tartalmakkal.
+---
 
-Üzemeltetők kezelése: Túravezetők és szolgáltatók nyilvántartása, értékelése.
+##  Technológiai stack
 
-Adminisztrációs felület: Szerepkör-alapú (RBAC) hozzáférés a tartalmak kezeléséhez (CRUD), a felhasználók menedzseléséhez, foglalások moderálásához és hibajegyek kezeléséhez.
+###  Frontend
+- React.js (Vite)  
+- CSS Grid / Flexbox  
+- Material UI  
+- Leaflet.js + Heatmap  
+- Context API  
 
-3. Technológiai Stack
-A rendszert szigorúan rétegezett, mikro-szolgáltatás (microservices) szemléletű architektúrában építettük fel.
+###  Backend
+- Node.js  
+- Express.js (REST API, MVC)  
+- JWT & Bcrypt  
+- Node-cron  
 
-Frontend (Kliensoldal):
-React.js (Vite környezetben)
+###  Adatbázis & DevOps
+- MySQL  
+- Docker & Docker Compose  
 
-CSS Grid / Flexbox (egyedi, reszponzív dizájn) & Material UI (komponensekhez)
+---
 
-Leaflet.js + Heatmap plugin (interaktív hőtérkép modul)
+##  Csapatmunka
 
-Context API (állapotkezelés)
+###  Németh Gergő
+- Rendszerarchitektúra  
+- Autentikáció  
+- Foglalási logika  
+- State management  
+- E2E tesztelés (Selenium)
 
-Backend (Szerversoldal):
-Node.js & Express.js (RESTful API, MVC minta alapján)
+###  Papp Ármin
+- Adatbázis tervezés  
+- Hőtérkép & galéria  
+- Admin felület  
+- Unit tesztek (Jest)
 
-JWT (JSON Web Token) & Bcrypt (autentikáció és kriptográfia)
+ **Módszertan:**
+- Agilis fejlesztés  
+- Heti sprintek  
+- CI  
+- Pair programming  
 
-Node-cron (feladatok ütemezése)
+---
 
-Adattárolás & Infrastruktúra:
-MySQL (mélyen normalizált relációs adatbázis)
+##  Adatbázis
+- 3NF normalizált MySQL  
+- 14 tábla  
 
-Docker & Docker Compose (konténerizáció)
+### Fő részek:
+**Felhasználók és interakciók**
+- Felhasználók  
+- Jogosultságok  
+- Foglalások  
+- Preferenciák  
 
-4. Csapatmunka és Feladatkörök
-A fejlesztés során az agilis módszertant követtük, heti sprintekkel és folyamatos integrációval (CI). A komplexebb moduloknál páros programozást (pair programming) alkalmaztunk. Mindkét csapattag Full-Stack szemléletben dolgozott.
+**Túrák és felszerelések**
+- Túrák  
+- Üzemeltetők  
+- Felszerelések  
+- Galéria  
 
-Németh Gergő
-Rendszerarchitektúra & Biztonság: RESTful API váz megtervezése, JWT/Bcrypt alapú autentikáció implementálása.
+---
 
-Core Logika: Foglalási rendszer és bérlési modul aszinkron logikájának fejlesztése.
+##  Tesztelés
 
-Frontend State Management: A React környezet felállítása, globális állapotkezelés, kliensoldali útválasztás.
+###  Manuális
+- Postman (API tesztelés)
 
-QA: End-to-End (E2E) automatizált tesztelés kiépítése Selenium Webdriver segítségével.
+###  Unit tesztek
+- Jest  
 
-Papp Ármin
-Adatbázis & Relációk: A MySQL ER diagram megtervezése, az adatbázis normalizációja.
+###  E2E
+- Selenium WebDriver  
+- 25 teszteset  
+- Chrome  
 
-Hőtérkép & Galéria: A Leaflet.js hőtérkép modul integrációja és a galéria rendszer végpontjainak megírása.
+---
 
-Admin & Üzemeltetők: Az adminisztrációs vezérlőpult teljes körű fejlesztése és az üzemeltetők kezelőfelülete.
+##  Eszközök
 
-QA: Backend automatikus egységtesztek írása Jest keretrendszerrel.
+**Design:**
+- Figma  
+- Canva  
+- Inkscape  
 
-5. Adatbázis architektúra
-A rendszer alapját egy 3NF (Harmadik Normálforma) szabályai szerint optimalizált, 14 táblából álló MySQL adatbázis adja. A tervezés két fő logikai blokkra oszlik:
+**Fejlesztés:**
+- VS Code  
+- Git & GitHub  
 
-Felhasználók és interakciók: Felhasználói adatok, hashelt jelszavak, jogosultságok, foglalások, bérlések és személyes túrapreferenciák N:M kapcsolatokkal.
+**Adatbázis:**
+- Docker  
+- phpMyAdmin  
 
-Túrák és felszerelések: Túrák, útvonalak, üzemeltetők, felszereléskészlet, árak, időpontok és kapcsolódó galériaelemek tárolása.
+**Projektmenedzsment:**
+- Moodle  
+- Discord  
+- Google Drive  
 
-6. Szoftvertesztelés (QA)
-A magas fokú rendelkezésre állás és hibamentes élmény érdekében többlépcsős tesztelést alkalmaztunk:
+---
 
-Manuális API tesztelés: Postman segítségével a végpontok és a middleware-ek (pl. jogosultság-ellenőrzés) validálása.
+##  Futtatás
 
-Backend egységtesztek (Unit Test): A kritikus üzleti logikák (pl. foglalási folyamat hibakezelése) automatizált ellenőrzése Jest segítségével.
+A rendszer Docker konténerekben fut, `.env` konfigurációval.
 
-Frontend End-to-End Tesztelés (E2E): Selenium Webdriver alapú, automatizált UI tesztelés, 25 tesztesettel lefedve a felhasználói interakciókat (regisztráció, túrára jelentkezés, bérlés, admin funkciók) Google Chrome környezetében.
+### ▶️ Indítás:
 
-7. Fejlesztési eszközök
-Tervezés & Dizájn: Figma, Canva, Inkscape
-
-Kódolás & Verziók: Visual Studio Code, Git & GitHub
-
-Adatbázis & DevOps: Docker Desktop, phpMyAdmin
-
-Projektmenedzsment: Vtk Moodle, Discord, Google Drive, Microsoft Office
-
-8. Környezet és Futtatás
-A platform telepítésének és futtatásának leegyszerűsítésére a teljes architektúrát Docker konténerekbe csomagoltuk. Az érzékeny adatokat a biztonsági standardoknak megfelelően lokális .env fájl kezeli.
-
-A rendszer indítása: A gyökérkönyvtárban elhelyezett inicializáló szkriptünk (init.js) egyetlen paranccsal elindítja a teljes rendszert (ellenőrzi a hálózatot, felhúzza az adatbázist, majd az API-t és a klienst):
-
-bash
+```bash
 node init.js
 
 
